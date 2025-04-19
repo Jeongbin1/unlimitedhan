@@ -1,3 +1,5 @@
 export default function Playground() {
-  return <div className="flex justify-center items-start">playground</div>;
+  return (
+    <div className="flex flex-col px-16 py-8 min-h-screen">playground</div>
+  );
 }

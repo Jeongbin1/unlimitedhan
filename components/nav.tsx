@@ -14,14 +14,15 @@ export default function Nav() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex items-center gap-2">
+    <nav className="flex items-center gap-6">
       {navlinks.map(({ href, label }) => (
         <Link
           key={href}
           href={href}
           className={cn(
-            'hover:font-black py-3 text-primary font-bold flex items-center',
-            pathname === href && 'underline underline-offset-4 font-black'
+            'border-b-2 border-transparent transition duration-300  hover:text-[#f27405]  hover:border-b-2 hover:border-[#ffb76b] py-5 text-primary font-bold flex items-center',
+            pathname === href &&
+              'border-b-2 border-[#f27405] text-[#f27405] font-black'
           )}
         >
           {label.toUpperCase()}
