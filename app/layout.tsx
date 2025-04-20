@@ -19,6 +19,17 @@ const cooper = localFont({
 export const metadata: Metadata = {
   title: 'unlimited Han',
   description: "Jeongbin1's blog",
+  openGraph: {
+    title: 'unlimited Han',
+    description: "Jeongbin1's blog",
+    images: [
+      {
+        url: '/images/logo.png',
+        width: 430,
+        height: 430,
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
