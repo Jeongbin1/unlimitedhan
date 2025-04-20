@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 import animate from 'tailwindcss-animate';
+import typography from '@tailwindcss/typography';
 
 module.exports = {
   darkMode: ['class'],
@@ -16,6 +17,11 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['var(--font-pretendard)', 'sans-serif'],
+        cooper: ['var(--font-cooper)', 'serif'],
+      },
+
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
@@ -63,7 +69,21 @@ module.exports = {
           5: 'hsl(var(--chart-5))',
         },
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            a: {
+              color: '#f27405',
+              fontWeight: '600',
+              textDecoration: 'underline',
+              '&:hover': {
+                color: '#ffb76b',
+              },
+            },
+          },
+        },
+      },
     },
   },
-  plugins: [animate],
+  plugins: [animate, typography],
 };

@@ -2,10 +2,18 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './style/globals.css';
 import Header from '@/components/Header';
+import ScrollToTop from '@/components/ScrollToTop';
 
 const pretendard = localFont({
   src: './style/fonts/PretendardVariable.woff2',
   display: 'swap',
+  variable: '--font-pretendard',
+});
+
+const cooper = localFont({
+  src: './style/fonts/Cooper-Bold.woff2',
+  display: 'swap',
+  variable: '--font-cooper',
 });
 
 export const metadata: Metadata = {
@@ -19,10 +27,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={pretendard.className}>
-      <body className="mx-auto max-w-screen-md">
-        <main className="flex flex-col">
-          <Header />
+    <html lang="ko" className={`${pretendard.variable} ${cooper.variable}`}>
+      <body>
+        <ScrollToTop />
+        <Header />
+        <main className="flex flex-col mx-auto max-w-screen-md">
           {children}
         </main>
       </body>
