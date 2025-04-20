@@ -1,5 +1,42 @@
+import { posts } from '#site/content';
+import Image from 'next/image';
+import Link from 'next/link';
+
 export default function Blog() {
   return (
-    <div className="flex flex-col px-16 py-8 min-h-screen">blog 페이지</div>
+    <div className="flex flex-col px-10 py-16 gap-4 min-h-screen">
+      <h1 className=" text-[2.6rem] font-cooper mb-6 text-[#ff9026]">BLOG</h1>
+      <ul className="space-y-4">
+        {posts
+          .sort(
+            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+          )
+          .map((post) => (
+            <li key={post.slug} className="border-b pb-4">
+              <Link href={post.permalink} className="flex justify-between">
+                <div className="flex flex-col gap-2 justify-center">
+                  <h2 className="text-[1.375rem] font-semibold text-black/80">
+                    {post.title}
+                  </h2>
+                  <p className="text-gray-500 text-xs">
+                    {new Date(post.date).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                    })}
+                  </p>
+                  <p className="mt-3 text-sm text-gray-600">{post.excerpt}</p>
+                </div>
+                <Image
+                  width={120}
+                  height={120}
+                  src={post.cover}
+                  alt={post.title}
+                  className="object-cover w-32 h-32"
+                />
+              </Link>
+            </li>
+          ))}
+      </ul>
+    </div>
   );
 }
