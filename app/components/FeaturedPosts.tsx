@@ -10,7 +10,7 @@ export default function FeaturedPosts() {
 
   return (
     <>
-      <h1 className=" text-[2.6rem] font-cooper mb-6 text-[#ff9026]">
+      <h1 className=" text-[2.6rem] font-cooper mb-6 text-primary">
         Featured Posts
       </h1>
       <ul className="space-y-4">

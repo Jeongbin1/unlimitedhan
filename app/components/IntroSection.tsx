@@ -21,16 +21,16 @@ export default function IntroSection() {
               frontend developer
             </span>
           </h2>
-          <p className="block px-4 py-2 font-medium text-black/50 rounded-sm bg-[#ffa55240] text-sm">
+          <p className="block px-4 py-2 font-medium text-black/50 rounded-sm bg-primary-40 text-sm">
             멋지고 재미있게 살고 싶은 사람 🍊
           </p>
           <div className="text-sm text-gray-600 leading-loose space-y-1">
             <div className="flex justify-between">
-              <span className="text-[#ff9026] font-semibold">I’m based in</span>
+              <span className="text-primary font-semibold">I’m based in</span>
               <span>Seoul, Korea</span>
             </div>
             <div className="flex justify-between gap-2">
-              <span className="text-[#ff9026] font-semibold whitespace-nowrap">
+              <span className="text-primary font-semibold whitespace-nowrap">
                 I work with
               </span>
               <span className="text-right space-x-1">
@@ -41,15 +41,13 @@ export default function IntroSection() {
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-[#ff9026] font-semibold">
-                I really love
-              </span>
+              <span className="text-primary font-semibold">I really love</span>
               <span className="text-right">gym, swimming, and traveling</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-[#ff9026] font-semibold">Find me on</span>
+              <span className="text-primary font-semibold">Find me on</span>
               <a
-                className="flex items-center gap-1 transition duration-300 underline hover:text-[#f27405] hover:fill-[#f27405] text-right"
+                className="flex items-center gap-1 transition duration-300 underline hover:text-secondary hover:fill-secondary text-right"
                 href="https://github.com/Jeongbin1"
                 target="_blank"
               >

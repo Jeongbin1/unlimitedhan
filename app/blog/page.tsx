@@ -5,7 +5,7 @@ import Link from 'next/link';
 export default function Blog() {
   return (
     <div className="flex flex-col px-10 py-16 gap-4 min-h-screen">
-      <h1 className=" text-[2.6rem] font-cooper mb-6 text-[#ff9026]">BLOG</h1>
+      <h1 className=" text-[2.6rem] font-cooper mb-6 text-primary">BLOG</h1>
       <ul className="space-y-4">
         {posts
           .sort(
