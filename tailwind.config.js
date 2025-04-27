@@ -76,7 +76,7 @@ module.exports = {
           css: {
             a: {
               color: '#f27405',
-              fontWeight: '600',
+              fontWeight: '400',
               textDecoration: 'underline',
               '&:hover': {
                 color: '#ffb76b',

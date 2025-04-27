@@ -12,10 +12,10 @@ export default function Blog() {
             (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
           )
           .map((post) => (
-            <li key={post.slug} className="border-b pb-4">
+            <li key={post.slug} className="border-b pb-4 group">
               <Link href={post.permalink} className="flex justify-between">
                 <div className="flex flex-col gap-2 justify-center">
-                  <h2 className="text-[1.375rem] font-semibold text-black/80">
+                  <h2 className="text-[1.375rem] font-semibold text-black/80 group-hover:text-secondary/80 group-hover:underline">
                     {post.title}
                   </h2>
                   <p className="text-gray-500 text-xs">
@@ -27,8 +27,8 @@ export default function Blog() {
                   <p className="mt-3 text-sm text-gray-600">{post.excerpt}</p>
                 </div>
                 <Image
-                  width={120}
-                  height={120}
+                  width={500}
+                  height={500}
                   src={post.cover}
                   alt={post.title}
                   className="object-cover w-32 h-32"
