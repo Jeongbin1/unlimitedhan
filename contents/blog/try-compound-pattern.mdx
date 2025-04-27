@@ -1,0 +1,200 @@
+---
+title: 컴파운드 패턴 사용기 (feat. 디자인 패턴)
+date: 2025-04-27
+cover: /contents/thumbnail/compound-pattern.webp
+excerpt: Dropdown 컴포넌트를 구현하면서 compound pattern을 사용해본 경험
+featured: true
+---
+
+## 어쩌다 컴파운드 패턴?
+
+아마 처음 관심을 가지게 된 건 `Headless UI`라는 말을 보고 머릿속에 ???가 떠올랐을 때였을 것이다.  
+매주 학습한 내용을 적용해 보면서 구현하던 작은 과제가 있었는데,
+어느 날은 이런 코멘트를 받게 된다.
+
+_**"내부 컴포넌트 구조도 headless 하도록 잘 나눠보세요!"**_  
+_**"headless 한 UI가 되도록 잘 작성하셨습니다. 👍"**_
+
+"아니 headless 한 게 뭐야?" 하다가 <span style={{ color: "#a0a0a0", fontSize: "90%"}}>(이제는 Headless UI가 스타일 없이 기능만 제공하는 것임을 알고 있다)</span> 로직과 스타일을 분리하는 구조 자체의 이점과 유연성에 대해 생각해 보게 된 것 같다.
+
+이후 다른 프로젝트를 하다가 StarRating이라는 별점 컴포넌트를 구현하게 되었다.  
+MUI를 썼었는데, 공통으로 쓰이는 부분이 조금 더 커서 이것저것 붙이다 보니 넘겨야 하는 props가 너무 많아지고 복잡해졌다.
+
+```tsx
+export default function StarRating({
+  value,
+  text,
+  layout = 'row',
+  starSize,
+  containerClassName = '',
+  textClassName = '',
+  descriptionClassName = '',
+}: StarRatingProps);
+```
+
+이때 리뷰해 주신 멘토님께서 유동적인 컴포넌트를 구현할 때 많이 쓰이는 컴파운드 패턴을 써보는 방법도 있다고 말씀해 주셨고,  
+컴포넌트별로 props를 줄 수 있기 때문에 전체를 감싸는 부모 컴포넌트가 아니라 각 요소에 추가 style이나 classname을 주는 게 가능해진다는 (그때 나름의) `💡모먼트`를 가지게 된다.  
+비록 그때에는 여러 이슈로 바로 변경하지 못했지만, 내 코드가 너무 더러운 코드라고 생각하기도 했고 많이 쓰기도 한다니 필요할 때는 꼭 써봐야지! 라고 생각했다.
+
+그리고 마참내~ 다음 프로젝트에서 공통 컴포넌트로 Dropdown을 맡게 되어서 사용해 보게 되었다.
+
+---
+
+## 구현해 보기
+
+처음에는 이렇게 구현했다
+
+```tsx
+import React, { ReactNode } from 'react';
+import useClickOutside from '@/app/hooks/useClickOutside';
+import DropdownButton from './DropdownButton';
+import DropdownMenu from './DropdownMenu';
+import DropdownMenuItem from './DropdownMenuItem';
+
+interface DropdownProps {
+  children: ReactNode;
+  onClose: () => void;
+}
+
+export default function Dropdown({ children, onClose }: DropdownProps) {
+  // 외부 클릭 시 닫히도록
+  const ref = useClickOutside(onClose);
+
+  return (
+    <div ref={ref} className="relative">
+      {children}
+    </div>
+  );
+}
+
+Dropdown.Button = DropdownButton;
+Dropdown.Menu = DropdownMenu;
+Dropdown.MenuItem = DropdownMenuItem;
+```
+
+부모 컴포넌트에 각각 구현한 Button, Menu, MenuItem을 공유할 수 있게 해주었고
+토글 함수와 외부 클릭 시 닫히는 부분은 **hook**을 따로 구현했다
+
+```ts
+import { useEffect, useRef } from 'react';
+
+const useClickOutside = (onClickOutside: () => void) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        onClickOutside();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [onClickOutside]);
+
+  return ref;
+};
+
+export default useClickOutside;
+```
+
+```ts
+import { useState, useCallback } from 'react';
+
+const useToggle = (initialValue = false) => {
+  const [state, setState] = useState(initialValue);
+
+  const toggle = useCallback(() => {
+    setState((prev) => !prev);
+  }, []);
+
+  const setTrue = useCallback(() => setState(true), []);
+  const setFalse = useCallback(() => setState(false), []);
+
+  return { state, toggle, setTrue, setFalse };
+};
+
+export default useToggle;
+```
+
+사용할 때는
+
+```tsx
+const dropdownState = useToggle();
+<Dropdown onClose={dropdownState.setFalse}>
+  <Dropdown.Button onClick={dropdownState.toggle}>
+    <div>드롭다운 버튼</div>
+  </Dropdown.Button>
+  {dropdownState.state && (
+    <Dropdown.Menu isOpen={dropdownState.state} animationType="slide">
+      <Dropdown.MenuItem>한 번</Dropdown.MenuItem>
+      <Dropdown.MenuItem>매일</Dropdown.MenuItem>
+      <Dropdown.MenuItem>주 반복</Dropdown.MenuItem>
+      <Dropdown.MenuItem>월 반복</Dropdown.MenuItem>
+    </Dropdown.Menu>
+  )}
+</Dropdown>;
+```
+
+이렇게 children으로 각각 Button, Menu, MenuItem을 조립해서 사용할 수 있었고, 각각의 디자인이나 MenuItem 개수 및 구성도 팀원들이 원하는 대로 유연하게 구성할 수 있었다.  
+다만, hook을 따로 구현해서 사용하는 팀원들이 쓸 때도 하나하나 호출해 줘야 했다.
+
+---
+
+## 개선해 보기
+
+만약 이 컴포넌트가 더 확장해서 쓰였다면 외부에서 호출하도록 hook을 그대로 쓰고 관리하도록 했을 텐데,  
+우리 프로젝트에서는 Dropdown의 형태를 가지고, button으로 trigger하고 외부나 button을 누르면 close되는 형태만 이용되었기 때문에, 팀원의 요청에 따라 내부로 넣어보기로 했다.
+
+이때 약간 난관을 겪었던 부분은, 내부에서 상태를 공유해야 하다 보니 특정 컴포넌트들에 특정 props를 전달해야 했는데, 외부에서 넘겨주는 것이 아니라 내부에서 자식 컴포넌트에 주어야 했던 부분이다.<span style={{ color: "#a0a0a0", fontSize: "90%"}}> (context를 공유하는 패턴이니 너무 당연하게도 createContext를 호출하여 Context를 통해 데이터를 전달하면 되지만 미처 그 생각을 하지 못했다.)</span>  
+어떻게 전달해 줄지 고민하다가 [isValidElement](https://react.dev/reference/react/isValidElement)와 [cloneElement](https://react.dev/reference/react/cloneElement)를 이용해서 필요한 prop을 전달해 주었다.<span style={{ color: "#a0a0a0", fontSize: "90%"}}>(React 공식 문서에서도 cloneElement의 대안으로 context를 이용할 것을 권장하고 있다.)</span>
+
+```tsx
+React.Children.map(children, (child) => {
+  if (React.isValidElement(child) && child.type === DropdownMenuItem) {
+    // DropdownMenuItem에 closeDropdown 전달
+    return React.cloneElement(child as ReactElement<DropdownMenuItemProps>, {
+      closeDropdown,
+    });
+  }
+  return child;
+});
+```
+
+이런 식으로 내부에서 prop을 전달하는 방식으로 구현하였고, close와 toggle 상태를 내부에서 관리하는 것으로 변경하는 데 성공했다.  
+확장성 부분에서는 조금 떨어지겠지만 어떻게 보면 보다 캡슐화되었고, 무엇보다 이 구조를 잘 알고 있는 팀원들에 한해서는 정말 ‘조립만’ 할 수 있어서 간편하게 이용할 수 있는 컴포넌트가 되었다.
+
+---
+
+## 사용해 본 후기
+
+이 과정들을 거쳐오면서 **좋았던 점**은,  
+일단 컴포넌트 자체도 어떤 논리적인 기능이기 때문에 구현 시에도 내 머릿속이 복잡해지는 경우가 꽤 있는데, 구현할 때 조각조각 분리해서 생각하면서 구현할 수 있어서 하나하나 차근차근 개발할 수 있었다는 것이다.  
+그리고 무엇보다, 꽤 다양한 곳에서 쓰였는데<span style={{ color: "#a0a0a0", fontSize: "90%"}}> (각자 다른 페이지를 담당했지만 모든 팀원들이 사용했던 것으로 기억한다)</span> 팀원들이 너무 편리하게 사용해서 뿌듯했다.  
+처음에 지저분한 코드에 대한 고민에서 시작했는데, 나중에는 깔끔하게 구현할 수 있게 되어서 의미 있는 경험이었다고 생각한다.
+
+확실히 어느 정도 볼륨이 있는 서비스라면, 재사용 할 수 있는 부분이나 중복된 부분이 나올 수밖에 없기 때문에 이런 패턴들을 이용해서 유연한 변경이 가능하고 관리가 쉽도록 구현할 것 같다.
+
+하지만 분명… 이번에 시도해 본 것은 가벼운 컴포넌트이고 이 정도의 패턴을 쓰는 것은 어렵지 않지만, 작은 컴포넌트부터 깔끔하고 효율적으로 설계하려고 하면 그만큼의 비용이 들어갈 것임을 알고 있다.  
+또, 컴파운드 패턴은 상태를 공유하면 구독 중인 모든 컴포넌트가 다시 렌더링 되기 때문에 re-render 비용이 커질 수 있어서 이 부분도 주의해야 할 것 같다.
+
+---
+
+## 그래서 디자인 패턴?
+
+이 프로젝트를 발표할 때, 어떤 분이 채팅으로 *너무 사랑하는 패턴*이라고 해주셨던 기억이 있다.  
+물론 나도 이 패턴을 스스로 사용해 보고 장점을 경험해 봤기 때문에 사랑할 만하다고 생각한다. ㅋㅋㅋㅋㅋ
+
+그럼에도... 다양한 패턴을 경험해 보고 코드를 짤 때 이런저런 방식으로 짤 수 있도록 나의 코드 짜는 흐름 자체를 확장하는 건 중요하다고 생각하지만, 나중에는 이렇게 너무 사랑해 버리는 패턴들만 무지성으로 쓰게 될 수 있기 때문에 주의하는 것도 필요하다고 생각한다.
+
+> Let clean code guide you. Then let it go.
+
+화제가 되었던 글 [Goodbye, Clean Code](https://overreacted.io/goodbye-clean-code/)에 나온 말이다.
+
+이런 패턴이나 코드 형식에 집착하기보다는, 왜 그렇게 짰는지를 항상 생각하면서 개발하는 것이 중요하다.  
+너무 많은 책임을 분리한다든지.. 언제까지나 코드를 짜고 개발할 때에 가지고 있어야 하는 **문제 해결**의 관점에서 목적을 가지고 사고하는 것이 중요하다는 걸 새기고 작업해야지.
