@@ -1,5 +1,6 @@
 import { defineConfig, s } from 'velite';
 import path from 'path';
+import rehypePrettyCode from 'rehype-pretty-code';
 
 export default defineConfig({
   collections: {
@@ -30,5 +31,16 @@ export default defineConfig({
           };
         }),
     },
+  },
+  mdx: {
+    rehypePlugins: [
+      [
+        rehypePrettyCode,
+        {
+          theme: 'slack-dark',
+          keepBackground: true,
+        },
+      ],
+    ],
   },
 });
