@@ -38,8 +38,8 @@ export default async function PostPage({
   const Component = getMDXComponent(post.content);
 
   return (
-    <article className="prose prose-slate dark:prose-invert flex flex-col max-w-none px-10 py-20 [&_pre]:overflow-x-auto [&_pre::-webkit-scrollbar]:hidden">
-      <h1 className="text-4xl">{post.title}</h1>
+    <article className="prose prose-slate dark:prose-invert flex flex-col max-w-none px-4 py-8 md:px-10 md:py-20 [&_pre]:overflow-x-auto [&_pre::-webkit-scrollbar]:hidden">
+      <h1 className="text-3xl md:text-4xl">{post.title}</h1>
       <p className="text-right my-2">
         {new Date(post.date).toLocaleDateString('en-US', {
           year: 'numeric',

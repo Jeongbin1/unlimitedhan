@@ -6,17 +6,17 @@ export default function IntroSection() {
       <h1 className="text-[2.6rem] font-cooper text-[rgb(255,144,38)]">
         Profile
       </h1>
-      <div className="flex justify-center pt-16 pb-16 gap-12 rounded-2xl">
+      <div className="flex flex-col md:flex-row items-center justify-center py-10 md:py-16 gap-12 rounded-2xl">
         <Image
           src="/images/profile.jpeg"
           alt="프로필"
           width={160}
           height={160}
-          className="opacity-85 object-cover rounded-t-full"
+          className="opacity-85 object-cover md:rounded-t-full"
         />
         <div className="flex flex-col gap-3">
           <h2 className="text-2xl font-semibold text-gray-600">
-            JEONG-BIN HAN{' '}
+            JEONGBIN HAN{' '}
             <span className="text-sm text-gray-400 italic">
               frontend developer
             </span>

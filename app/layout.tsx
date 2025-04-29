@@ -42,7 +42,7 @@ export default function RootLayout({
       <body>
         <ScrollToTop />
         <Header />
-        <main className="flex flex-col mx-auto max-w-screen-md">
+        <main className="flex flex-col mx-2 sm:mx-6 md:mx-auto md:max-w-screen-md">
           {children}
         </main>
       </body>
