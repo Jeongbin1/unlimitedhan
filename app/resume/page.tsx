@@ -20,7 +20,7 @@ export default function Resume() {
             <IntroduceSection list={IntroduceItems} />
           </CardContent>
         </Card>
-        <div className="border-t mx-8" />
+        <div className="border-t mx-4 md:mx-8" />
         <Card>
           <CardHeader>
             <CardTitle>Projects</CardTitle>
@@ -29,7 +29,7 @@ export default function Resume() {
             <ProjectSection list={ProjectItems} />
           </CardContent>
         </Card>
-        <div className="border-t mx-8" />
+        <div className="border-t mx-4 md:mx-8" />
         <Card>
           <CardHeader>
             <CardTitle>Skills</CardTitle>
@@ -38,7 +38,7 @@ export default function Resume() {
             <SkillsSection stack={skills} />
           </CardContent>
         </Card>
-        <div className="border-t mx-8" />
+        <div className="border-t mx-4 md:mx-8" />
         <Card>
           <CardHeader>
             <CardTitle>Certificate</CardTitle>
