@@ -17,11 +17,16 @@ const cooper = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://unlimitedhan.vercel.app'),
   title: 'unlimited Han',
   description: "Jeongbin1's blog",
+  keywords: ['블로그', '포트폴리오', '개발자', '프론트엔드', 'frontend'],
   openGraph: {
     title: 'unlimited Han',
     description: "Jeongbin1's blog",
+    type: 'website',
+    siteName: 'unlimited Han',
+    url: 'https://unlimitedhan.vercel.app',
     images: [
       {
         url: '/images/logo.png',
@@ -29,6 +34,12 @@ export const metadata: Metadata = {
         height: 430,
       },
     ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'unlimited Han',
+    description: "Jeongbin1's blog",
+    images: ['/images/logo.png'],
   },
 };
 
