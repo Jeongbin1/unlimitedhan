@@ -1,6 +1,11 @@
 'use client';
 
-import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetTitle,
+} from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
 import Link from 'next/link';
@@ -22,7 +27,9 @@ export function MobileNav() {
           <Menu className="h-6 w-6" />
         </Button>
       </SheetTrigger>
+
       <SheetContent side="right" className="w-[200px] sm:w-[240px]">
+        <SheetTitle className="sr-only">menu</SheetTitle>
         <nav className="flex flex-col space-y-2 mt-6">
           {navlinks.map(({ href, label }) => (
             <Link
