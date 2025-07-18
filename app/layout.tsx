@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import './style/globals.css';
 import Header from '@/components/Header';
 import ScrollToTop from '@/components/ScrollToTop';
+import { Analytics } from '@vercel/analytics/react'
 
 const pretendard = localFont({
   src: './style/fonts/PretendardVariable.woff2',
@@ -55,6 +56,7 @@ export default function RootLayout({
         <Header />
         <main className="flex flex-col mx-2 sm:mx-6 md:mx-auto md:max-w-screen-md">
           {children}
+          <Analytics />
         </main>
       </body>
     </html>
