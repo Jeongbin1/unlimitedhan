@@ -42,13 +42,13 @@ module.exports = {
           foreground: 'hsl(var(--popover-foreground))',
         },
         primary: {
-          DEFAULT: '#ff9026',
-          60: '#ffa55260',
-          40: '#ffa55240',
+          DEFAULT: 'hsl(var(--primary))',
+          60: 'hsl(var(--primary-60))',
+          40: 'hsl(var(--primary-40))',
           foreground: 'hsl(var(--primary-foreground))',
         },
         secondary: {
-          DEFAULT: '#f27405',
+          DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',
         },
         muted: {
