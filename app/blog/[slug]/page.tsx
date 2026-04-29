@@ -2,6 +2,9 @@ import { notFound } from 'next/navigation';
 import { posts } from '#site/content';
 import * as runtime from 'react/jsx-runtime';
 import { Metadata } from 'next';
+import Aside from '@/components/mdx/Aside';
+
+const components = { Aside };
 
 const getMDXComponent = (code: string) => {
   const fn = new Function(code);
@@ -46,7 +49,7 @@ export default async function PostPage({
           month: 'short',
         })}{' '}
       </p>
-      <Component />
+      <Component components={components} />
     </article>
   );
 }
